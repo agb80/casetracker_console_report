@@ -175,13 +175,38 @@ function casetracker_console_report_form_alter(&$form, $form_state, $form_id) {
       '#type' => 'file',
       '#title' => t('Upload New Template File'),
     );    
+    // Finally add our custom submit handler to upload pdf files
+    $form['#submit'][] = 'casetracker_console_report_upload_template';
+  } 
+} 
+
+/**
+ * Helper function to upload template to templates dir
+ */
+function casetracker_console_report_upload_template($form, &$form_state) {
+  // Save new file:
+  // Note: The jQuery update is required to use Ajax for file upload. With
+  // default Drupal jQuery it will not work.
+  // For upload with Ajax a iFrame is open and upload in it, because
+  // normal forms are not allowed to handle directly.
+  $files_path = file_directory_path();
+  $template_dir = variable_get('views_pdf_template_path', 'views_pdf_templates');
+  $dir = $files_path . '/' . $template_dir;
+  if (!is_dir($dir)) {
+    @mkdir($dir);
+    @chmod($dir, 0775);
   }
-}  
+          
+  if (is_writable($dir)) {
+    $template_path = file_create_path($dir);
+    $file = file_save_upload('template_file', array(), $template_path);
+  }
+}
 
 /**
  * Implement hook_views_pre_render()
  **/
-function casetracker_console_views_pre_render(&$view) {
+function casetracker_console_report_views_pre_render(&$view) {
   if ($view->name != 'casetracker_console') {
     return;
   }
@@ -210,7 +235,7 @@ function casetracker_console_views_pre_render(&$view) {
 /**
  * Implement hook_views_pre_execute()
  */
-function casetracker_console_views_pre_execute(&$view) {
+function casetracker_console_report_views_pre_execute(&$view) {
   if ($view->name != 'casetracker_console') {
     return;
   }
