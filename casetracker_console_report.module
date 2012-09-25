@@ -207,7 +207,7 @@ function casetracker_console_report_upload_template($form, &$form_state) {
  * Implement hook_views_pre_render()
  **/
 function casetracker_console_report_views_pre_render(&$view) {
-  if ($view->name != 'casetracker_console') {
+  if ($view->name != 'casetracker_console' && !($view->name == 'casetracker_cases' && automodal_request_is_child())) {
     return;
   }
   
@@ -216,14 +216,19 @@ function casetracker_console_report_views_pre_render(&$view) {
       /**
        * Add print button for report
        */
-       drupal_add_css(drupal_get_path('module', 'casetracker_console_report'). '/css/buttons.css');
        $link = 'casetracker/console/report';
+       $legend = t('Print Report');
+       drupal_add_css(drupal_get_path('module', 'casetracker_console_report'). '/css/buttons.css');
+       if (automodal_request_is_child()) {
+         $link = 'casetracker/filter/report';
+         $legend = t('Detailed Report');
+       }
+
        $filter = $_GET['field_due_date_value'];
        if ($filter) {
          $filter = 'field_due_date_value[value][date]='. $filter['value']['date'];
        }
-       $view->attachment_before = '<div class="print_button">'. l(t('Detailed Report'), $link, array('query' => $filter)) .'</div>';
-       $view->attachment_before .= '<div class="print_button">'. l(t('Print Report'), $link, array('query' => $filter)) .'</div>';
+       $view->attachment_before = '<div class="print_button">'. l($legend, $link, array('query' => $filter)) .'</div>';
        break;
        
     case 'pdf_1':
@@ -236,9 +241,10 @@ function casetracker_console_report_views_pre_render(&$view) {
  * Implement hook_views_pre_execute()
  */
 function casetracker_console_report_views_pre_execute(&$view) {
-  if ($view->name != 'casetracker_console') {
+  if ($view->name != 'casetracker_console' && $view->name != 'casetracker_cases') {
     return;
   }
+ 
   if ($view->current_display == 'pdf_1') {
     // Set custom options from space
     $space = spaces_get_space();

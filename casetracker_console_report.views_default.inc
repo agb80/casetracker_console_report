@@ -424,6 +424,28 @@ function casetracker_console_report_views_default_views() {
       'field' => 'current',
       'relationship' => 'none',
     ),
+    'delta' => array(
+      'operator' => '=',
+      'value' => array(
+        'value' => '',
+        'min' => '',
+        'max' => '',
+      ),
+      'group' => '0',
+      'exposed' => TRUE,
+      'expose' => array(
+        'use_operator' => 0,
+        'operator' => 'delta_op',
+        'identifier' => 'delta',
+        'label' => 'Content: Due Date (field_due_date) - delta',
+        'optional' => 1,
+        'remember' => 0,
+      ),
+      'id' => 'delta',
+      'table' => 'node_data_field_due_date',
+      'field' => 'delta',
+      'relationship' => 'none',
+    ),
   ));
   $handler->override_option('access', array(
     'type' => 'none',
@@ -432,8 +454,155 @@ function casetracker_console_report_views_default_views() {
     'type' => 'none',
   ));
   $handler->override_option('items_per_page', 0);
+  $handler = $view->new_display('pdf', 'PDF Page', 'pdf_1');
+  $handler->override_option('style_plugin', 'pdf_table');
+  $handler->override_option('style_options', array(
+    'mission_description' => FALSE,
+    'description' => '',
+    'info' => array(
+      'title' => array(
+        'header_style' => array(
+          'text' => array(
+            'font_size' => '',
+            'font_family' => 'default',
+            'font_style' => array(
+              'b' => 0,
+              'i' => 0,
+              'u' => 0,
+              'd' => 0,
+              'o' => 0,
+            ),
+            'align' => NULL,
+            'hyphenate' => NULL,
+            'color' => '',
+          ),
+          'render' => array(
+            'is_html' => 1,
+            'eval_before' => '',
+            'eval_after' => '',
+          ),
+        ),
+        'body_style' => array(
+          'text' => array(
+            'font_size' => '',
+            'font_family' => 'default',
+            'font_style' => array(
+              'b' => 0,
+              'i' => 0,
+              'u' => 0,
+              'd' => 0,
+              'o' => 0,
+            ),
+            'align' => NULL,
+            'hyphenate' => NULL,
+            'color' => '',
+          ),
+          'render' => array(
+            'is_html' => 0,
+            'eval_before' => '',
+            'eval_after' => '',
+          ),
+        ),
+        'position' => array(
+          'width' => '',
+        ),
+      ),
+      'include' => array(
+        'header_style' => array(
+          'text' => array(
+            'font_size' => '',
+            'font_family' => 'default',
+            'font_style' => array(
+              'b' => 0,
+              'i' => 0,
+              'u' => 0,
+              'd' => 0,
+              'o' => 0,
+            ),
+            'align' => NULL,
+            'hyphenate' => NULL,
+            'color' => '',
+          ),
+          'render' => array(
+            'is_html' => 1,
+            'eval_before' => '',
+            'eval_after' => '',
+          ),
+        ),
+        'body_style' => array(
+          'text' => array(
+            'font_size' => '',
+            'font_family' => 'default',
+            'font_style' => array(
+              'b' => 0,
+              'i' => 0,
+              'u' => 0,
+              'd' => 0,
+              'o' => 0,
+            ),
+            'align' => NULL,
+            'hyphenate' => NULL,
+            'color' => '',
+          ),
+          'render' => array(
+            'is_html' => 0,
+            'eval_before' => '',
+            'eval_after' => '',
+          ),
+        ),
+        'position' => array(
+          'width' => '',
+        ),
+      ),
+    ),
+    'position' => array(
+      'last_writing_position' => 1,
+      'x' => '',
+      'y' => '',
+      'width' => '',
+      'row_height' => '',
+    ),
+    'grouping' => '',
+  ));
+  $handler->override_option('row_plugin', 'pdf_fields');
+  $handler->override_option('path', 'casetracker/console/detailed_report');
+  $handler->override_option('menu', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('tab_options', array(
+    'type' => 'none',
+    'title' => '',
+    'description' => '',
+    'weight' => 0,
+    'name' => 'navigation',
+  ));
+  $handler->override_option('displays', array());
+  $handler->override_option('sitename_title', FALSE);
+  $handler->override_option('default_page_format', 'A4');
+  $handler->override_option('default_page_format_custom', '');
+  $handler->override_option('default_page_orientation', 'P');
+  $handler->override_option('unit', 'mm');
+  $handler->override_option('margin_left', '15');
+  $handler->override_option('margin_right', '15');
+  $handler->override_option('margin_top', '15');
+  $handler->override_option('margin_bottom', '15');
+  $handler->override_option('leading_template', '');
+  $handler->override_option('template', '');
+  $handler->override_option('succeed_template', '');
+  $handler->override_option('default_font_family', 'helvetica');
+  $handler->override_option('default_font_style', array());
+  $handler->override_option('default_font_size', '11');
+  $handler->override_option('default_text_align', 'L');
+  $handler->override_option('default_font_color', '000000');
+  $handler->override_option('default_text_hyphenate', 'none');
+  $handler->override_option('css_file', '');
   $translatables['casetracker_console_project_list'] = array(
     t('Defaults'),
+    t('PDF Page'),
   );
 
   $views[$view->name] = $view;
