@@ -1,3 +1,7 @@
+.attachment.attachment-before {
+  clear: both;
+}
+
 .print_button {
   float: right;
 }
