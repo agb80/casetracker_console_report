@@ -230,7 +230,7 @@ function casetracker_console_report_views_pre_render(&$view) {
          if (!in_array($key, $exclude)) {
            // Special case for date filter
            if ($key == 'field_due_date_value' && $value) {  
-             $filter['field_due_date_value[value][date]'] = $value['date'] ? $value['date'] : $value['value'];
+             $filter['field_due_date_value[value][date]'] = is_array($value['value']) ? $value['value']['date'] : $value['value'];
            }
            else {
              $filter[$key] = $value;
@@ -273,8 +273,8 @@ function casetracker_console_report_views_pre_execute(&$view) {
  */
 function casetracker_console_report_views_default_views_alter(&$views) {
   if (module_exists('atrium_casetracker')) {
-    _casetracker_console_spaces_filter($views['casetracker_console']);
-    _casetracker_console_spaces_access($views['casetracker_console']);
+    _casetracker_console_spaces_filter($views['casetracker_console_report']);
+    _casetracker_console_spaces_access($views['casetracker_console_report']);
   }
   if (is_array($views['casetracker_console_report']->display['default']->display_options['fields']))
     $total = array_pop($views['casetracker_console_report']->display['default']->display_options['fields']);
@@ -288,4 +288,19 @@ function casetracker_console_report_views_default_views_alter(&$views) {
   $total['id'] = $total_id;
   $views['casetracker_console_report']->display['default']->display_options['fields'][$total_id] = $total;
 }
-
+/**
+ * Implements hook_views_query_alter()
+ */
+function casetracker_console_report_views_query_alter(&$view, &$query) {
+  if ($view->name != 'casetracker_console_report')
+    return;
+  // Unset filters others than Case Tracker project, node published & spaces
+  // from  $query object to prevent get empty results on view
+  $keys = array('0');
+  foreach ($query->where as $key => $value) {
+    if (!in_array($key, $keys)) {
+      $query->where_date =  $query->where[$key];
+      unset($query->where[$key]);
+    }
+  }
+}

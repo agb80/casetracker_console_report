@@ -51,15 +51,17 @@ function casetracker_console_report_views_default_views() {
       'field' => 'title',
       'relationship' => 'none',
     ),
-    'case_count_filter_5' => array(
-      'label' => 'Closed',
+    'case_count_filter_6' => array(
+      'label' => 'Total Cases',
       'alter' => array(
         'alter_text' => 0,
         'text' => '',
         'make_link' => 0,
         'path' => '',
+        'absolute' => 0,
         'link_class' => '',
         'alt' => '',
+        'rel' => '',
         'prefix' => '',
         'suffix' => '',
         'target' => '',
@@ -74,9 +76,10 @@ function casetracker_console_report_views_default_views() {
       'empty' => '',
       'hide_empty' => 0,
       'empty_zero' => 0,
-      'type' => 'status-8',
+      'hide_alter_empty' => 1,
+      'type' => '0',
       'exclude' => 0,
-      'id' => 'case_count_filter_5',
+      'id' => 'case_count_filter_6',
       'table' => 'casetracker_case',
       'field' => 'case_count_filter',
       'relationship' => 'none',
@@ -135,7 +138,7 @@ function casetracker_console_report_views_default_views() {
       ),
       'date_method' => 'OR',
       'granularity' => 'day',
-      'form_type' => 'date_popup',
+      'form_type' => 'date_text',
       'default_date' => '',
       'default_to_date' => '',
       'year_range' => '-3:+3',
@@ -144,25 +147,9 @@ function casetracker_console_report_views_default_views() {
       'field' => 'field_due_date_value',
       'relationship' => 'none',
     ),
-    'current' => array(
-      'operator' => 'all',
-      'value' => '',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'current',
-      'table' => 'spaces',
-      'field' => 'current',
-      'relationship' => 'none',
-    ),
   ));
   $handler->override_option('access', array(
-    'type' => 'spaces_feature',
-    'spaces_feature' => 'atrium_casetracker',
-    'perm' => 'access content',
+    'type' => 'none',
   ));
   $handler->override_option('cache', array(
     'type' => 'none',
