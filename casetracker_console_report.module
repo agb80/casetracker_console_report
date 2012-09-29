@@ -241,7 +241,7 @@ function casetracker_console_report_views_pre_render(&$view) {
  * Implement hook_views_pre_execute()
  */
 function casetracker_console_report_views_pre_execute(&$view) {
-  if ($view->name != 'casetracker_console' && $view->name != 'casetracker_cases') {
+  if ($view->name != 'casetracker_console_report' && $view->name != 'casetracker_cases') {
     return;
   }
  
@@ -257,3 +257,25 @@ function casetracker_console_report_views_pre_execute(&$view) {
     }
   } 
 }
+
+/**
+ * Implementation of hook_views_default_views_alter().
+ */
+function casetracker_console_report_views_default_views_alter(&$views) {
+  if (module_exists('atrium_casetracker')) {
+    _casetracker_console_spaces_filter($views['casetracker_console']);
+    _casetracker_console_spaces_access($views['casetracker_console']);
+  }
+  if (is_array($views['casetracker_console_report']->display['default']->display_options['fields']))
+    $total = array_pop($views['casetracker_console_report']->display['default']->display_options['fields']);
+    
+  $statuses = casetracker_realm_load('status');
+  $increment = 0;
+  foreach ($statuses as $status => $label) {
+    _casetracker_console_add_column($status, $label, ++$increment, $views['casetracker_console_report']);
+  }
+  $total_id = 'case_count_filter_' . ++$increment;
+  $total['id'] = $total_id;
+  $views['casetracker_console_report']->display['default']->display_options['fields'][$total_id] = $total;
+}
+
