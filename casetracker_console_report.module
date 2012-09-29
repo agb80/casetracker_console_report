@@ -206,7 +206,7 @@ function casetracker_console_report_upload_template($form, &$form_state) {
 /**
  * Implement hook_views_pre_render()
  **/
-function casetracker_console_report_views_pre_render(&$view) {
+function casetracker_console_report_views_pre_render(&$view) { 
   if ($view->name != 'casetracker_console' && !($view->name == 'casetracker_cases' && automodal_request_is_child())) {
     return;
   }
@@ -223,11 +223,21 @@ function casetracker_console_report_views_pre_render(&$view) {
          $link = 'casetracker/filter/report';
          $legend = t('Detailed Report');
        }
-
-       $filter = $_GET['field_due_date_value'];
-       if ($filter) {
-         $filter = 'field_due_date_value[value][date]='. $filter['value']['date'];
+       
+       // Handle exposed filters
+       $exclude = array('q', 'automodal', 'automodalClose');
+       foreach ($_GET as $key => $value) {
+         if (!in_array($key, $exclude)) {
+           // Special case for date filter
+           if ($key == 'field_due_date_value' && $value) {  
+             $filter['field_due_date_value[value][date]'] = $value['date'] ? $value['date'] : $value['value'];
+           }
+           else {
+             $filter[$key] = $value;
+           }
+         }
        }
+
        $view->attachment_before = '<div class="print_button">'. l($legend, $link, array('query' => $filter)) .'</div>';
        break;
        
