@@ -489,11 +489,11 @@ class PdfTemplate extends FPDI
     
     // Set draw point to the indicated position:
     if (empty($options['position']['x'])) {
-      $options['position']['x'] = 0;
+      $options['position']['x'] = $this->lMargin;
     }
         
     if (empty($options['position']['y'])) {
-      $options['position']['y'] = 0;
+      $options['position']['y'] = $this->tMargin;
     }
     
     if (isset($options['position']['last_writing_position']) && $options['position']['last_writing_position']) {

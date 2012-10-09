@@ -250,12 +250,12 @@ function casetracker_console_report_views_pre_render(&$view) {
 /**
  * Implement hook_views_pre_execute()
  */
-function casetracker_console_report_views_pre_execute(&$view) {
-  if ($view->name != 'casetracker_console_report' && $view->name != 'casetracker_cases') {
+function casetracker_console_report_views_pre_view(&$view, &$display_id, &$args) {
+  if ($view->name != 'casetracker_console_report' && $view->name != 'casetracker_cases_report') {
     return;
   }
  
-  if ($view->current_display == 'pdf_1') {
+  if ($display_id == 'pdf_1') {
     // Set custom options from space
     $space = spaces_get_space();
     $config = $space->controllers->variable->values['space'];

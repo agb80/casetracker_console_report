@@ -80,7 +80,7 @@ class views_pdf_plugin_display extends views_plugin_display_page {
     
     // Set margins: top, left, right
     $this->view->pdf->SetMargins($this->get_option('margin_left'), $this->get_option('margin_top'), $this->get_option('margin_right'), TRUE);
-    
+    //dsm($this->view->pdf->getMargins());
     // Set auto page break: margin bottom:
     $this->view->pdf->SetAutoPageBreak(TRUE, $this->get_option('margin_bottom'));
     
